@@ -1,0 +1,59 @@
+\documentclass[20pt]{extarticle}
+\usepackage{extsizes}
+\usepackage{fontspec}
+\usepackage[utf8]{inputenc}%
+\usepackage{lmodern}%
+\usepackage{textcomp}%
+\usepackage{lastpage}%
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{caption}
+\usepackage[colorlinks,linkcolor=red]{hyperref}
+\usepackage{geometry}
+\usepackage{xcolor}
+\definecolor{grey}{rgb}{0.5,0.5,0.5}
+%insert_mix_rgb%
+
+\definecolor{backwhite}{rgb}{1,1,0}
+\setmainfont{Helvetica}
+\geometry{top=2.54cm,bottom=3cm,left=2cm,right=2cm}
+%
+\title{AstroToday}%
+% \author{Yunyang Li}%
+\date{\today}%
+%
+
+\begin{document}%
+\pagestyle{empty}
+\newgeometry{left=0pt, right=0pt, bottom=0.5cm}
+
+\colorbox{grey}{
+	\parbox[h]{0.88\textwidth}{
+		\centering
+		\fontsize{50pt}{30pt}\selectfont % The first argument for fontsize is the font size of the text and the second is the line spacing - you may need to play with these for your particular title
+		% \vspace*{0.7cm} % Space between the start of the title and the top of the grey box
+		\includegraphics[width=1.0\linewidth]{cover.jpg}
+		\hfill
+		\leftline{\small \bf
+%insert_img_title%
+		}
+
+		\vspace*{0.5cm}
+		\hfill
+		\textcolor{mix}{AstroToday} \rightline{\small \today}\\
+		
+		 % Space between the end of the title and the bottom of the grey box
+	}
+}\\
+\begin{figure}[h!]
+\captionsetup{labelformat=empty, margin=28pt}
+\caption{\footnotesize \sf \sl \color{grey}
+%insert_img_expl%
+}
+\end{figure}
+\restoregeometry
+\clearpage
+%insert_text%
+
+
+\end{document}
