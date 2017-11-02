@@ -5,7 +5,8 @@ This software works as a Web crawler and get the latest arXiv abstracts on a dai
 file and distributes it to the subscribers via email. The abstracts are covered with a beautiful picture from apod.
 
 An example of the cover letter.
-![img](https://github.com/LiYunyang/Software-arXivDaily/blob/master/frontpage.png)
+![img](https://github.com/LiYunyang/Software-arXivDaily/blob/master/front1.png)
+![img](https://github.com/LiYunyang/Software-arXivDaily/blob/master/front1.png)
 
 An example of the content.
 ![img](https://github.com/LiYunyang/Software-arXivDaily/blob/master/content.png)
