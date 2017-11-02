@@ -6,7 +6,7 @@ file and distributes it to the subscribers via email. The abstracts are covered 
 
 An example of the cover letter.
 ![img](https://github.com/LiYunyang/Software-arXivDaily/blob/master/front1.png)
-![img](https://github.com/LiYunyang/Software-arXivDaily/blob/master/front1.png)
+![img](https://github.com/LiYunyang/Software-arXivDaily/blob/master/front2.png)
 
 An example of the content.
 ![img](https://github.com/LiYunyang/Software-arXivDaily/blob/master/content.png)
