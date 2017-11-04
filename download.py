@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
+from html.parser import HTMLParser
 
 def scrap():
     url = 'https://arxiv.org/list/astro-ph/new?skip=0&show=2000'
@@ -51,7 +51,6 @@ def de_symbol(text, symbol):
     text = text.replace('\rm', 'TOBErm')
     text = text.replace('\,', ' ')
     if symbol.find('\\'):
-
         symbol = '\\' + ''.join(symbol.split('\\'))
 
     for sym in symbol:
@@ -159,9 +158,14 @@ def hand_write(imgtitle, imgexpl, rgb, arxiv_item):
                         new.writelines(r'\small \textcolor{teal}{%s} \\ \\' % _['class'])
                         for i, name in enumerate(_['author']):
                             if i != len(_['author']) - 1:
-                                new.writelines('\\small \href{https://arxiv.org%s}{%s},~~~~' % (name[0], de_symbol(name[1], '#%&*')))
+                                new.writelines('\\small \href{https://arxiv.org%s}{' % name[0])
+                                new.writelines(str(h.unescape(name[1]).encode('utf-8')))
+                                new.writelines('},~~~~')
                             else:
-                                new.writelines(r'\small \href{https://arxiv.org%s}{%s}\\ \\' % (name[0], de_symbol(name[1], '#%&*')))
+                                new.writelines(r'\small \href{https://arxiv.org%s}{' % name[0])
+                                new.writelines(str(h.unescape(name[1]).encode('utf-8')))
+                                new.writelines(r'} \\ \\')
+
                         # new.writelines(r'\small \textcolor{teal}{arXiv:%s} \\ \\' % _['pdf'][5:])
                         new.writelines(consider_math(_['abstract']))
                         new.writelines('\n')
@@ -247,6 +251,7 @@ def get_cover(y=None, m=None, d=None):
 
 
 if __name__ == '__main__':
+    h = HTMLParser()
     if os.path.exists('arxivdaily.tex'):
         print 'Tex already ready'
     else:
