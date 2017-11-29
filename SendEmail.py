@@ -56,7 +56,7 @@ def getCurTime():
 if __name__ == '__main__':
     date = getCurTime()
     open("../data/%s.pdf" % date, "wb").write(open('arxivdaily.pdf', "rb").read())
-    with open('SubscribeList.txt', 'r') as lines:
+    with open('subscribeList.csv', 'r') as lines:
         for line in lines:
             if line[0] != '#':
                 if line[:-1] == '\n':

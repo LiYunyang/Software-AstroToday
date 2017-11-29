@@ -10,6 +10,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from html.parser import HTMLParser
 
+
 def scrap():
     url = 'https://arxiv.org/list/astro-ph/new?skip=0&show=2000'
     request = urllib2.Request(url)
@@ -50,6 +51,8 @@ def de_symbol(text, symbol):
     text = text.replace('[', ' ')
     text = text.replace('\rm', 'TOBErm')
     text = text.replace('\,', ' ')
+    text = text.replace('\~', '~')
+    text = text.replace('&#', 'ANDSHARP')
     if symbol.find('\\'):
         symbol = '\\' + ''.join(symbol.split('\\'))
 
@@ -66,7 +69,6 @@ def de_symbol(text, symbol):
         elif sym == '^':
             l = text.split(sym)
             if len(l) > 1:
-
                 text = reduce(lambda x, y: x + r'\textasciicircum{}' + y, l)
             else:
                 text = l[0]
@@ -78,6 +80,8 @@ def de_symbol(text, symbol):
             else:
                 text = l[0]
     text = text.replace('TOBErm', '\rm')
+    text = text.replace('~', ' $\sim$ ')
+    text = text.replace('ANDSHARP', '&#')
     return text
 
 
@@ -128,11 +132,9 @@ def math_text_process(text):
 
 def consider_math(text):
     ravel = text.split('$')
-
-    # if text[0] != '$':
     for idx, _ in enumerate(ravel):
         if idx % 2 == 0:
-            ravel[idx] = de_symbol(_, '#%^&_{}\\')
+            ravel[idx] = str(h.unescape(de_symbol(_, '#%^&_{}\\')).encode('utf-8'))
         else:
             ravel[idx] = math_text_process(_)
 
@@ -169,7 +171,7 @@ def hand_write(imgtitle, imgexpl, rgb, arxiv_item):
                         # new.writelines(r'\small \textcolor{teal}{arXiv:%s} \\ \\' % _['pdf'][5:])
                         new.writelines(consider_math(_['abstract']))
                         new.writelines('\n')
-                    new.writelines(r'\\ \\ \small \textcolor{teal}{End}')
+                    new.writelines(r'\\ \\ \small \textcolor{teal}{End Of File}')
 
 
 def getCurTime():
@@ -187,13 +189,14 @@ def get_cover(y=None, m=None, d=None):
         d = yesterday.day
         m = yesterday.month
         y = yesterday.year - 2000
+
     url = 'https://apod.nasa.gov/apod/ap%02d%02d%02d.html' % (y, m, d)
     request = urllib2.Request(url)
     print url
     response = urllib2.urlopen(request)
     content = response.read()
     pattern = re.compile(
-            '<a href="(image/\d\d\d\d/.*?)".*?<center>.*?<b> (.*?) </b> <br>.*?<b> Explanation: </b>(.*?)<p> *<center>',
+            '<IMG SRC="(image/\d\d\d\d/.*?)".*?<center>.*?<b> (.*?) </b> <br>.*?<b> Explanation: </b>(.*?)<p> *<center>',
             re.S)
     match = re.findall(pattern, content)
     while match == []:
@@ -204,10 +207,11 @@ def get_cover(y=None, m=None, d=None):
         response = urllib2.urlopen(request)
         content = response.read()
         pattern = re.compile(
-                '<a href="(image/\d\d\d\d/.*?)".*?<center>.*?<b> (.*?) </b> <br>.*?<b> Explanation: </b>(.*?)<p> *<center>',
+                '<IMG SRC="(image/\d\d\d\d/.*?)".*?<center>.*?<b> (.*?) </b> <br>.*?<b> Explanation: </b>(.*?)<p> *<center>',
                 re.S)
         match = re.findall(pattern, content)
     imgurl = 'https://apod.nasa.gov/apod/' + match[0][0]
+    print imgurl
     imgtitle = match[0][1]
     imgexpl = match[0][2]
     imgexpl = imgexpl.replace('\n', ' ')
@@ -215,21 +219,23 @@ def get_cover(y=None, m=None, d=None):
     for _ in to_remove:
         imgexpl = imgexpl.replace(_, '')
 
-
-    request = urllib2.Request(imgurl, None)
-    response = urllib2.urlopen(request)
-    with open("cover.jpg", "wb") as f:
-        f.write(response.read())
+    if os.path.exists('cover.jpg') is False:
+        request = urllib2.Request(imgurl, None)
+        response = urllib2.urlopen(request)
+        with open('cover.jpg', "wb") as f:
+            f.write(response.read())
+    else:
+        pass
 
     img = Image.open('cover.jpg')
-
     imgary = np.array(img)
     ratio = 0.5
 
     try:
         h, l, rgb = imgary.shape
         r, g, b = 255, 255, 255
-    except Exception, e:
+
+    except:
         h, l = imgary.shape
         rgb = None
         r, g, b = 255, 255, 255
