@@ -49,7 +49,10 @@ def de_symbol(text, symbol):
     text = text.replace('&gt;', r'>')
     text = text.replace('] ', ' ')
     text = text.replace('[', ' ')
-    text = text.replace('\rm', 'TOBErm')
+    text = text.replace('\\rm', 'TOBErm')
+    text = text.replace('\\it', 'TOBEit')
+    text = text.replace('\\tt', 'TOBEtt')
+    text = text.replace('\\text', 'TOBEtext')
     text = text.replace('\,', ' ')
     text = text.replace('\~', '~')
     text = text.replace('&#', 'ANDSHARP')
@@ -79,7 +82,10 @@ def de_symbol(text, symbol):
                 text = reduce(lambda x, y: x + '\\' + sym + y, l)
             else:
                 text = l[0]
-    text = text.replace('TOBErm', '\rm')
+    text = text.replace('TOBErm', '\\rm')
+    text = text.replace('TOBEit', '\\it')
+    text = text.replace('TOBEtt', '\\tt')
+    text = text.replace('TOBEtext', '\\text')
     text = text.replace('~', ' $\sim$ ')
     text = text.replace('ANDSHARP', '&#')
     return text
@@ -104,6 +110,11 @@ def math_text_process(text):
     text = text.replace(r'TOBEGAMMA', r'\gamma')
     text = text.replace(r'\msun', r'M_{\odot}')
     text = text.replace(r'\Msun', r'M_{\odot}')
+    text = text.replace(r'\Rsun', r'\mathrm{R_\odot}')
+    text = text.replace(r'\Rjup', r'\mathrm{R_{jup}}')
+    text = text.replace(r'\Mjup', r'\mathrm{M_{jup}}')
+    text = text.replace(r'\Pjup', r'\mathrm{P_{jup}}')
+    text = text.replace(r'\pjup', r'\mathrm{p_{jup}}')
     text = text.replace(r'\solar', r'\odot')
     text = text.replace(r'\sun', r'\odot')
     text = text.replace(r'\arcdeg', r'^{\circ}')
@@ -113,6 +124,8 @@ def math_text_process(text):
     text = text.replace(r'\rsh', r'r_sh')
     text = text.replace(r'\rg', r'r_g')
     text = text.replace(r'\rm', r'\mathrm')
+    text = text.replace(r'\kpc', r'\mathrm{kpc}')
+
     text = text.replace(r'\max', r'\mathrm{max}')
     text = text.replace(r'\min', r'\mathrm{min}')
     text = text.replace(r'\upmu', r'\mathrm{\mu}')
@@ -134,7 +147,7 @@ def consider_math(text):
     ravel = text.split('$')
     for idx, _ in enumerate(ravel):
         if idx % 2 == 0:
-            ravel[idx] = str(h.unescape(de_symbol(_, '#%^&_{}\\')).encode('utf-8'))
+            ravel[idx] = str(h.unescape(de_symbol(_, '#%^&_\\')).encode('utf-8'))
         else:
             ravel[idx] = math_text_process(_)
 
