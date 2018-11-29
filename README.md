@@ -1,4 +1,4 @@
-# Software-AstroToday
+# ```AstroToday```
 Collecting the newest astro-ph abstracts from arXiv on a daily basis
 
 This software works as a Web crawler and get the latest arXiv abstracts on a daily basis. It packs the abstracts in to a pdf
